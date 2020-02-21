@@ -211,7 +211,7 @@ triad.census.quicker=function(net,attr,directed=F){
   for(i in 1:colnum){
     cmat[[i]]=Matrix(rep(colNums==i,length(col)),nrow=length(col),byrow=FALSE)*1
   }
-  colorCombs=permutations(colnum,3,unique(colors),repeats.allowed = TRUE)
+  colorCombs=permutation(colnum,3,unique(colors),repeats.allowed = TRUE)
   colorCombsNames=colorCombs
   for(i in 1:nrow(colorCombs)) for(j in 1:ncol(colorCombs)) colorCombsNames[i,j]=names(colors)[colorCombs[i,j]]
   
