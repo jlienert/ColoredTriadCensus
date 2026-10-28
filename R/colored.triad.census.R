@@ -1,10 +1,4 @@
-require(network)
-library(sna)
-require(ergm.count)
-require(gtools)
-require(Matrix)
-require(gplots)
-load("uniTri.RData")
+
 
 kfun<-function(k,output="fourClass",directed=T){
   if(k>=3){
@@ -32,8 +26,10 @@ kfun<-function(k,output="fourClass",directed=T){
   }
 }
 
+#' @importFrom Matrix diag
 tr=function(mat){return(sum(diag(mat)))}
 
+#' @importFrom gtools permutations
 txtmats=function(){
   perms=permutations(3,3,1:3)
   ret=list()
@@ -66,6 +62,7 @@ makeUniqueTri=function(triangle,colorCombs){
   return(out)
 }
 
+#' @importFrom Matrix t diag
 remEx=function(triad,colorCombs,testM,testE0,testC,cmat){
   T003Col=c()
   for(i in 1:nrow(colorCombs)){
@@ -74,91 +71,91 @@ remEx=function(triad,colorCombs,testM,testE0,testC,cmat){
       names(T003Col)[i]=paste("T003",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,0,0,0,0,0,0,0,0),nrow=3)
     }
-    
+
     if(triad=="012"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testE0)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testE0)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T012",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,0,0,0,0,0,1,0,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="102"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testE0)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testE0))
       names(T003Col)[i]=paste("T102",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,0,0,0,0,1,0,1,0),nrow=3)
     }
-    
+
     if(triad=="021D"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testC)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testE0)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*t(testC)))
       names(T003Col)[i]=paste("T021D",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,1,0,0,0,0,0,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="021U"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*t(testC))%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testE0)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T021U",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,0,0,1,0,0,1,0,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="021C"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testC)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testE0)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T021C",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,0,0,0,0,1,0,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="111D"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testC)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testE0))
       names(T003Col)[i]=paste("T111D",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,0,0,0,1,0,1,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="111U"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*t(testC))%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testE0))
       names(T003Col)[i]=paste("T111U",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,0,0,1,0,1,0,1,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="030T"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*t(testC))%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*t(testC))%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T030T",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,0,0,1,0,0,1,1,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="030C"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testC)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testC)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T030C",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,0,0,0,1,1,0,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="201"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testM)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testE0)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testM))
       names(T003Col)[i]=paste("T201",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,1,1,1,0,1,0,0),nrow=3)
     }
-    
+
     if(triad=="120D"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testC)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*t(testC)))
       names(T003Col)[i]=paste("T120D",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,1,0,0,1,0,1,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="120U"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*t(testC))%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T120U",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,0,0,1,0,1,1,1,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="120C"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testC)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T120C",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,0,0,0,1,1,1,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="210"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testM)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testC))
       names(T003Col)[i]=paste("T210",paste(colorCombs[i,],collapse="",sep=""),sep="-")
       triangle=matrix(c(0,1,0,1,0,1,1,1,0),nrow=3,byrow=T)
     }
-    
+
     if(triad=="300"){
       T003Col[i]=tr((t(cmat[[colorCombs[i,2]]])*cmat[[colorCombs[i,1]]]*testM)%*%(t(cmat[[colorCombs[i,3]]])*cmat[[colorCombs[i,2]]]*testM)%*%(t(cmat[[colorCombs[i,1]]])*cmat[[colorCombs[i,3]]]*testM))
       names(T003Col)[i]=paste("T300",paste(colorCombs[i,],collapse="",sep=""),sep="-")
@@ -168,25 +165,26 @@ remEx=function(triad,colorCombs,testM,testE0,testC,cmat){
   imp=uniTri[names(uniTri)==paste((max(colorCombs)),triad,sep=" ")][[1]]
   #imp=makeUniqueTri(triangle=triangle,colorCombs)
   T003Col2=c()
-  for(i in unique(imp)) 
+  for(i in unique(imp))
   {
     T003Col2[length(T003Col2)+1]=T003Col[imp==i][1]
     names(T003Col2)[length(T003Col2)]=names(T003Col)[imp==i][1]
-    
+
     if(triad %in% c("003","300")){
       if (colorCombs[i,1]==colorCombs[i,2] | colorCombs[i,1]==colorCombs[i,3] | colorCombs[i,2]==colorCombs[i,3]) T003Col2[length(T003Col2)]=T003Col2[length(T003Col2)]/2
-      if (colorCombs[i,1]==colorCombs[i,2] & colorCombs[i,1]==colorCombs[i,3] & colorCombs[i,2]==colorCombs[i,3]) T003Col2[length(T003Col2)]=T003Col2[length(T003Col2)]/3  
+      if (colorCombs[i,1]==colorCombs[i,2] & colorCombs[i,1]==colorCombs[i,3] & colorCombs[i,2]==colorCombs[i,3]) T003Col2[length(T003Col2)]=T003Col2[length(T003Col2)]/3
     }
-    
-    if(triad=="030C") if (colorCombs[i,1]==colorCombs[i,2] & colorCombs[i,1]==colorCombs[i,3] & colorCombs[i,2]==colorCombs[i,3]) T003Col2[length(T003Col2)]=T003Col2[length(T003Col2)]/3 
-    
+
+    if(triad=="030C") if (colorCombs[i,1]==colorCombs[i,2] & colorCombs[i,1]==colorCombs[i,3] & colorCombs[i,2]==colorCombs[i,3]) T003Col2[length(T003Col2)]=T003Col2[length(T003Col2)]/3
+
     if(triad %in% c("102","021D","021U","201","120D","120U")) if (colorCombs[i,3]==colorCombs[i,2]) T003Col2[length(T003Col2)]=T003Col2[length(T003Col2)]/2
-    
+
   }
-  print(triad)
+  # print(triad)
   return(T003Col2)
 }
 
+#' @importFrom Matrix Matrix
 colored.triad.census=function(mat,col,directed=F){
   #Adjacency matrix
   testA=mat[,]
@@ -200,13 +198,13 @@ colored.triad.census=function(mat,col,directed=F){
   testE=pmin(testE,1)
   testE0=1-testE
   diag(testE0)=0
-  
+
   testA=Matrix(testA)
   testC=Matrix(testC)
   testM=Matrix(testM)
   testE=Matrix(testE)
   testE0=Matrix(testE0)
-  
+
   #Colors
   #number of colors
   colnum=length(unique(col))
@@ -220,7 +218,7 @@ colored.triad.census=function(mat,col,directed=F){
     cmat[[i]][,]
   }
   colorCombs=permutations(colnum,3,unique(colors),repeats.allowed = TRUE)
-  
+
   #003
   T003Col=remEx(triad="003",colorCombs=colorCombs,testM=testM,testE0=testE0,testC=testC,cmat=cmat)
   #102
@@ -230,7 +228,7 @@ colored.triad.census=function(mat,col,directed=F){
   #300
   T300Col=remEx("300",colorCombs=colorCombs,testM=testM,testE0=testE0,testC=testC,cmat=cmat)
   x=c(T003Col,T102Col,T201Col,T300Col)
-  
+
   if(directed==T) {
     #012
     T012Col=remEx("012",colorCombs=colorCombs,testM=testM,testE0=testE0,testC=testC,cmat=cmat)

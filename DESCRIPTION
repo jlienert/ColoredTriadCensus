@@ -1,0 +1,32 @@
+Package: ColoredTriadCensus
+Type: Package
+Title: An efficient counting method for the colored triad census
+Version: 0.1.0
+Authors@R: c(
+    person("Jeffrey", "Lienert", email = "jeffreylienert@gmail.com", role = c("aut", "cre")),
+    person("Laura", "Koehly", role = c("aut")),
+    person("Felix", "Reed-Tsochas", role = c("aut")),
+    person("Christopher Steven", "Marcum", role = c("aut")),
+    person("Martin", "Herrerias Azcue", email = "martin.herreriasazcue@manchester.ac.uk", role = c("ctb"))
+  )
+Description: Provides an efficient algorithm for constructing the colored triad census,
+    as described in Lienert et al. (2019, Social Networks 58, 136-142).
+URL: https://doi.org/10.1016/j.socnet.2019.04.003, https://github.com/jlienert/ColoredTriadCensus/
+BugReports: https://github.com/jlienert/ColoredTriadCensus/issues
+License: MIT
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    gtools,
+    Matrix,
+Suggests: 
+    network,
+    sna,
+    ergm.count,
+    gplots,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: 
+    R (>= 3.5)
+LazyData: true
